@@ -6,27 +6,25 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    
+
     public static void main(String[] args) {
-        try (Socket clientSocket = new Socket("netology.homework", Server.localhost)) {
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            Scanner console = new Scanner(System.in);
-            System.out.println("Подключен к серверу. Отправьте сообщение (введите 'end' для выхода):");
-            while (true) {
-                String response = in.readLine(); //получение сообщения от сервера
-                if (response.equalsIgnoreCase("end")) {
-                    break;
-                }
-                System.out.println("Server: " + response); //получение сообщения от сервера
-                String message = console.nextLine(); //отправление сообщение серверу
-                if (message.equalsIgnoreCase("end")) {
-                    break;
-                }
-                out.println(message);
-            }
+
+        try (Socket clientSocket = new Socket("netology.homework", Server.localhost);
+             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+             Scanner scanner = new Scanner(System.in)) {
+
+            System.out.println(in.readLine());
+            String message = in.readLine();
+            System.out.println(message);
+            String response = scanner.nextLine();
+            out.println(response);
+            System.out.println(in.readLine());
+            response = scanner.nextLine();
+            out.println(response);
+            System.out.println(in.readLine());
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Error " + ex);
         }
     }
 }
